@@ -56,17 +56,17 @@
       apt: upgrade=safe
 
     - name: install required packages
-      apt: state=installed pkg={{ item }}
-      with_items: DEFAULT_PACKAGES
+      apt: state=present pkg={{ item }}
+      with_items: "{{ DEFAULT_PACKAGES }}"
 
     - name: install extra packages defined in secrets.yml
-      apt: state=installed pkg={{ item }}
+      apt: state=present pkg={{ item }}
       with_items: "{{ EXTRA_PACKAGES|default([]) }}"
 
     - name: setup ufw
       ufw: state=enabled policy=deny
 
-    - name: allow ssh traffic
+    - name: allow ssh traffic in ufw
       ufw: rule=allow port={{ SSH_PORT }} proto=tcp
 
     - name: change ssh port
